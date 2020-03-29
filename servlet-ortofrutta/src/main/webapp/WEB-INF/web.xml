@@ -1,0 +1,82 @@
+<web-app xmlns="http://xmlns.jcp.org/xml/ns/javaee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/javaee
+         http://xmlns.jcp.org/xml/ns/javaee/web-app_3_1.xsd"
+	version="3.1">
+	
+	<servlet>
+		<servlet-name>negozioOrtofrutta</servlet-name>
+		<servlet-class>it.dstech.servlet.CreaProdotto</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>negozioOrtofrutta</servlet-name>
+		<url-pattern>/negozio</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+		<servlet-name>compraOrtofrutta</servlet-name>
+		<servlet-class>it.dstech.servlet.CompraProdotto</servlet-class>
+	</servlet>
+	
+	<servlet-mapping>
+		<servlet-name>compraOrtofrutta</servlet-name>
+		<url-pattern>/compra</url-pattern>
+	</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>indirizzamento</servlet-name>
+	<servlet-class>it.dstech.servlet.ServletManagment</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>indirizzamento</servlet-name>
+	<url-pattern>/intro</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>eliminare</servlet-name>
+	<servlet-class>it.dstech.servlet.RimuoviProdotto</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>eliminare</servlet-name>
+	<url-pattern>/rimuovi</url-pattern>
+</servlet-mapping>
+	
+	<servlet>
+	<servlet-name>beta</servlet-name>
+	<servlet-class>it.dstech.servlet.SceltaAzione</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>beta</servlet-name>
+	<url-pattern>/scegliAzione</url-pattern>
+</servlet-mapping>
+
+
+<servlet>
+	<servlet-name>sceltaCliente</servlet-name>
+	<servlet-class>it.dstech.servlet.AzioneCliente</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>sceltaCliente</servlet-name>
+	<url-pattern>/cliente</url-pattern>
+</servlet-mapping>
+	
+	
+	<servlet>
+	<servlet-name>aggiungiCliente</servlet-name>
+	<servlet-class>it.dstech.servlet.AggiungiCliente</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>aggiungiCliente</servlet-name>
+	<url-pattern>/nuovoCliente</url-pattern>
+</servlet-mapping>
+	
+	<welcome-file-list>
+	<welcome-file>/welcome.jsp</welcome-file>
+	</welcome-file-list>
+	</web-app>

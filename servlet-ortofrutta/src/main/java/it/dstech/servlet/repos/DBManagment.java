@@ -1,0 +1,233 @@
+package it.dstech.servlet.repos;
+
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+
+import it.dstech.servlet.modelli.Prodotto;
+import it.dstech.servlet.modelli.Cliente;
+import it.dstech.servlet.modelli.Scontrino;
+
+public class DBManagment {
+List<Prodotto> carrello=new ArrayList<>();
+Scontrino scontrino =new Scontrino();
+		private Connection connessione;
+
+		public DBManagment() throws SQLException, ClassNotFoundException {
+			Class.forName("com.mysql.cj.jdbc.Driver"); 
+			String password = "95asroma"; 
+			String username = "root"; 
+			String url = "jdbc:mysql://localhost:3306/magazzinoortofrutticolo?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
+			this.connessione = DriverManager.getConnection(url, username, password);
+		}
+		public void aggiungiCliente(Cliente c) throws SQLException {
+			PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO clienti(nome) VALUES ( ?);");
+			prepareStatement.setString(1, c.getNome());
+			prepareStatement.execute();
+		}
+
+		public void addProdotto(Prodotto p) throws SQLException {
+			PreparedStatement controlloProdotti = this.connessione.prepareStatement("select * from prodotti ");
+			ResultSet executecontrolloProdotti = controlloProdotti.executeQuery();
+			String nome="";
+			int quantità=0;
+			while (executecontrolloProdotti.next()) {
+				nome=executecontrolloProdotti.getString(2);
+				quantità=executecontrolloProdotti.getInt(3);
+				}
+			if(p.getNome().equalsIgnoreCase(nome)) {
+				PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set quantità = ? where nome = ?");
+				updateQuery.setInt(1, p.getQuantità()+quantità);
+				updateQuery.setString(2, p.getNome());
+				updateQuery.execute();
+			}
+			else {
+			PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO prodotti(nome, quantità, descrizione, prezzo) VALUES ( ?, ?, ?, ?);");
+			prepareStatement.setString(1, p.getNome());
+			prepareStatement.setInt(2, p.getQuantità());
+			prepareStatement.setString(3, p.getDescrizione());
+			prepareStatement.setInt(4, p.getPrezzo());
+			prepareStatement.execute();
+			
+			}
+		}
+		public void rimuoviProdotto(Prodotto p) throws SQLException {
+			PreparedStatement prepareStatement = this.connessione.prepareStatement("delete from prodotti where id = ? limit 1");
+			prepareStatement.setInt(1,p.getId());
+			prepareStatement.execute();
+		}
+		public void rimuoviCliente(int id) throws SQLException {
+			PreparedStatement prepareStatement = this.connessione.prepareStatement("delete from clienti where id = ? limit 1");
+			prepareStatement.setInt(1, id);
+			prepareStatement.execute();
+		}
+		public void creaScontrino(int idCliente) throws SQLException {
+			PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO scontrino(id_clienti,spesa_totale) VALUES ( ?, ?);");
+			prepareStatement.setInt(1, idCliente);
+			prepareStatement.setInt(2, scontrino.calcolaPrezzoTotale());
+			prepareStatement.execute();
+            PreparedStatement prepareStatement2 = this.connessione.prepareStatement("select Max(id) from scontrino");
+            ResultSet executeQuery = prepareStatement2.executeQuery();
+           int idScontrino=0;
+            while(executeQuery.next()) {
+            	idScontrino =executeQuery.getInt(1);
+            }
+            for(Prodotto prodotto: scontrino.getProdottiAquistati() ) {
+    			PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti_venduti set id_scontrino = ? where id = ?");
+                updateQuery.setInt(1, idScontrino);
+                updateQuery.setInt(2, prodotto.getId());
+                updateQuery.execute();
+			}
+				
+				
+				
+		}
+
+		public boolean vendiProdotto(int idCliente,Prodotto p) throws SQLException {
+			
+			Prodotto prodottoDB =new Prodotto();
+			
+							
+            PreparedStatement prepareStatement = this.connessione.prepareStatement("select * from prodotti where id = ? limit 1");
+			prepareStatement.setInt(1, p.getId());
+			ResultSet executeQuery = prepareStatement.executeQuery();
+			
+			while (executeQuery.next()) {
+				prodottoDB.setId(executeQuery.getInt(1));
+				prodottoDB.setQuantità(executeQuery.getInt(3));
+				prodottoDB.setNome(executeQuery.getString(2));
+				prodottoDB.setPrezzo(executeQuery.getInt(5));
+			}
+             
+			if (p.getQuantità() > prodottoDB.getQuantità()) {
+				return false;
+			}
+			
+			scontrino.getProdottiAquistati().add(prodottoDB);
+			PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set quantità = ? where id = ?");
+			updateQuery.setInt(1, prodottoDB.getQuantità() - p.getQuantità());
+			updateQuery.setInt(2, prodottoDB.getId());
+			updateQuery.execute();
+			PreparedStatement prepareStatement3 = this.connessione.prepareStatement("INSERT INTO prodotti_venduti(numero_vendite, id_prodotti_venduti) VALUES ( ?, ?);");
+			prepareStatement3.setInt(1,p.getQuantità());
+			prepareStatement3.setInt(2,p.getId());
+			prepareStatement3.execute();
+			
+			
+			
+			return true;
+
+		}
+		public List<Scontrino> scontriniDiUnCliente(int idCliente) throws SQLException {
+			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from scontrino where id_clienti=?;");
+			updateQuery.setInt(1, idCliente);
+			ResultSet executeQuery = updateQuery.executeQuery();
+			List<Scontrino> listaScontrini= new ArrayList<>();
+			while(executeQuery.next()) {
+			Scontrino scontrino =new Scontrino();
+			scontrino.setDataDiEmissione(executeQuery.getTimestamp(4));
+			scontrino.setIdCliente(idCliente);
+			scontrino.setPrezzoTotale(executeQuery.getInt(3));
+			listaScontrini.add(scontrino);
+			}
+			return listaScontrini;
+		}
+		public List<Prodotto> stampaCarrello(){
+			List<Prodotto> carrello=new ArrayList<>();
+			for (Prodotto prodotto: scontrino.getProdottiAquistati()) {
+				carrello.add(prodotto);
+			}
+			return carrello;
+		}
+		public List<Cliente> stampaScontrini() throws SQLException {
+			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from clienti;");
+			ResultSet executeQuery = updateQuery.executeQuery();
+			List<Cliente> elencoClienti = new ArrayList<>();
+			while(executeQuery.next()) {
+				Cliente temp = new Cliente();
+				temp.setId(executeQuery.getInt(1));
+				temp.setNome(executeQuery.getString(2));
+				PreparedStatement updateQuery2 = this.connessione.prepareStatement("select * from scontrino where id_clienti=?;");
+				updateQuery2.setInt(1,temp.getId() );
+				ResultSet executeQuery2 = updateQuery.executeQuery();
+           while(executeQuery2.next()) {
+				Scontrino temp2=new Scontrino();
+        	   temp2.setId(executeQuery2.getInt(1));
+        	   temp2.setDataDiEmissione(executeQuery2.getTimestamp(4));
+        	   temp.getListaScontrini().add(temp2);
+        	  
+           }
+           elencoClienti.add(temp);
+			}
+			return elencoClienti;
+		}
+
+		public List<Prodotto> getAll() throws SQLException {
+			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from prodotti;");
+			ResultSet executeQuery = updateQuery.executeQuery();
+			List<Prodotto> elenco = new ArrayList<>();
+			while(executeQuery.next()) {
+				Prodotto temp = new Prodotto();
+				temp.setId(executeQuery.getInt(1));
+				temp.setNome(executeQuery.getString(2));
+				temp.setQuantità(executeQuery.getInt(3));
+				temp.setDescrizione(executeQuery.getString(4));
+				temp.setPrezzo(executeQuery.getInt(5));
+
+				elenco.add(temp);
+			}
+			return elenco;
+		}
+		public List<Prodotto> creaListaVendite() throws SQLException {
+			List<Prodotto> elenco = new ArrayList<>();
+			PreparedStatement trovaIdProdotto = connessione
+					.prepareStatement("select distinct id_prodotti_venduti from prodotti_venduti;");
+			ResultSet executetrovaIdProdotto = trovaIdProdotto.executeQuery();
+			List<Integer> elencoIdProdotti = new ArrayList<>();
+			
+			while (executetrovaIdProdotto.next()) {
+				int idProdotto = executetrovaIdProdotto.getInt(1);
+				elencoIdProdotti.add(idProdotto);
+			} 
+			for(Integer idProdotto:elencoIdProdotti ) {
+				
+			
+			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from prodotti_venduti where id_prodotti_venduti=?;");
+			updateQuery.setInt(1, idProdotto);
+			ResultSet executeQuery = updateQuery.executeQuery();
+			Prodotto temp = new Prodotto();
+			
+			while(executeQuery.next()) {	
+				temp.setQuantità(executeQuery.getInt(2)+temp.getQuantità());
+			}
+			PreparedStatement updateQuery2 = this.connessione.prepareStatement("select * from prodotti where id=?;");
+			updateQuery2.setInt(1, idProdotto);
+			ResultSet executeQuery2 = updateQuery2.executeQuery();
+			while(executeQuery2.next()) {
+				temp.setNome(executeQuery2.getString(2));
+				elenco.add(temp);
+			}
+			}
+			return elenco;
+		}
+		public List<Cliente> listaClienti() throws SQLException{
+			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from clienti;");
+			ResultSet executeQuery = updateQuery.executeQuery();
+			List<Cliente> elenco = new ArrayList<>();
+			while(executeQuery.next()) {
+				Cliente temp = new Cliente();
+				temp.setId(executeQuery.getInt(1));
+				temp.setNome(executeQuery.getString(2));
+				
+
+				elenco.add(temp);
+			}
+			return elenco;
+		}
+		}
+	
+
