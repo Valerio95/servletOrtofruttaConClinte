@@ -21,11 +21,22 @@ table, th, td {
 <table>
 <tr>
   <th>Lista Prodotti</th>
-</tr>	
+</tr>
+<tr>
+    <td>
+Nome
+</td>  
+<td>
+ Quantità
+</td>  
+  </tr>	
 <%for(Prodotto p : listaProdotti){%>
 <tr>
     <td>
- <%=p.getNome()%> - <%=p.getQuantità()%> <br><br>
+ <%=p.getNome()%>
+</td>  
+<td>
+ <%=p.getQuantità()%> 
 </td>  
   </tr>
 <% } %>

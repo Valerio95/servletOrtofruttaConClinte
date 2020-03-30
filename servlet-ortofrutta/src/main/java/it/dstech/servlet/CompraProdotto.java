@@ -32,10 +32,12 @@ public class CompraProdotto extends HttpServlet{
 		try {
 			DBManagment db = new DBManagment();
 			boolean vendiProdotto = db.vendiProdotto(idCliente,p);
+			List<Prodotto> lista = db.getAll();
+			List<Prodotto> carrello = db.stampaCarrello();
+
 			if(vendiProdotto) {
-				List<Prodotto> lista = db.getAll();
+				req.setAttribute("idCliente", idCliente);
 				req.setAttribute("lista", lista);
-				List<Prodotto> carrello = db.stampaCarrello();
 				req.setAttribute("carrello", carrello);
 				req.getRequestDispatcher("compraProdotto.jsp").forward(req, resp);
 			}

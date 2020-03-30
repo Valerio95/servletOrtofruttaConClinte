@@ -2,6 +2,7 @@ package it.dstech.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -34,10 +35,12 @@ public class CreaProdotto extends HttpServlet{
 		try {
 			DBManagment dbManagment = new DBManagment();
 			dbManagment.addProdotto(p);
+			List<Prodotto> lista = dbManagment.getAll();
+			req.setAttribute("lista", lista);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		req.getRequestDispatcher("welcome.jsp").forward(req, resp);
+		req.getRequestDispatcher("creaProdotto.jsp").forward(req, resp);
 
 	}
 }

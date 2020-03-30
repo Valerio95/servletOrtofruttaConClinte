@@ -19,7 +19,15 @@ public class SceltaAzione extends HttpServlet{
 		String azione = req.getParameter("azione");
 		System.out.println(azione);
 		if ("aggiungi".equalsIgnoreCase(azione)) {
+			try {
+				DBManagment db = new DBManagment();
+				List<Prodotto> lista = db.getAll();
+				req.setAttribute("lista", lista);
 			req.getRequestDispatcher("creaProdotto.jsp").forward(req, resp);
+} catch (ClassNotFoundException | SQLException e) {
+				
+				e.printStackTrace();
+			}
 		} else if ("stampa".equalsIgnoreCase(azione)) {
 			try {
 				DBManagment db = new DBManagment();
@@ -60,7 +68,13 @@ public class SceltaAzione extends HttpServlet{
 		}
 req.getRequestDispatcher("rimuoviProdotto.jsp").forward(req, resp);
 }else if ("aggiungiCliente".equalsIgnoreCase(azione)) {
-	
+	try {
+	DBManagment db = new DBManagment();
+	List<Cliente> lista =  db.listaClienti();
+	req.setAttribute("lista", lista);
+	} catch (ClassNotFoundException | SQLException e) {
+		e.printStackTrace();
+	}
 req.getRequestDispatcher("aggiungiCliente.jsp").forward(req, resp);
 }else if ("rimuoviCliente".equalsIgnoreCase(azione)) {
 	try {

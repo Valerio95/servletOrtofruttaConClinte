@@ -98,8 +98,8 @@ Id
 <% } %>
 </select></p>
 Quantità: <input type="number"  min = "1"name ="qta" /><br><br>
-<input type="submit" value="Aggiungi"> <br><br>
-	<input type="submit" value="Compra"> <br><br>
+<input type="submit" name ="azione" value="Aggiungi"> <br><br>
+<input type="submit" name ="azione" value="Compra"> <br><br>
 </form>
 <form action="intro">
 <input type="submit" value="Torna in home"> </form>

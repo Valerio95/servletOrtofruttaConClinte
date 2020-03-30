@@ -2,6 +2,7 @@ package it.dstech.servlet;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -26,7 +27,9 @@ public class RimuoviProdotto extends HttpServlet{
 		try {
 			DBManagment db = new DBManagment();
 			 db.rimuoviProdotto(p);
-				req.getRequestDispatcher("welcome.jsp").forward(req, resp);
+			 List<Prodotto> lista = db.getAll();
+				req.setAttribute("lista", lista);
+				req.getRequestDispatcher("rimuoviProdotto.jsp").forward(req, resp);
 			}
 		catch (SQLException | ClassNotFoundException e) {
 			        e.printStackTrace();

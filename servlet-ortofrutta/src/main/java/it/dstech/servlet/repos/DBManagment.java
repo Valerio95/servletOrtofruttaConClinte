@@ -14,7 +14,7 @@ import it.dstech.servlet.modelli.Scontrino;
 
 public class DBManagment {
 List<Prodotto> carrello=new ArrayList<>();
-Scontrino scontrino =new Scontrino();
+ static Scontrino scontrino =new Scontrino();
 		private Connection connessione;
 
 		public DBManagment() throws SQLException, ClassNotFoundException {
@@ -30,31 +30,33 @@ Scontrino scontrino =new Scontrino();
 			prepareStatement.execute();
 		}
 
-		public void addProdotto(Prodotto p) throws SQLException {
+		public boolean addProdotto(Prodotto p) throws SQLException {
 			PreparedStatement controlloProdotti = this.connessione.prepareStatement("select * from prodotti ");
-			ResultSet executecontrolloProdotti = controlloProdotti.executeQuery();
-			String nome="";
-			int quantità=0;
-			while (executecontrolloProdotti.next()) {
-				nome=executecontrolloProdotti.getString(2);
-				quantità=executecontrolloProdotti.getInt(3);
-				}
-			if(p.getNome().equalsIgnoreCase(nome)) {
-				PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set quantità = ? where nome = ?");
+			ResultSet executeControlloProdotti = controlloProdotti.executeQuery();
+			
+			while (executeControlloProdotti.next()) {
+				String nome=executeControlloProdotti.getString(2);
+				int quantità=executeControlloProdotti.getInt(3);
+				String descrizione=executeControlloProdotti.getString(2);
+				
+			if(p.getNome().equalsIgnoreCase(nome)&p.getDescrizione().equalsIgnoreCase(descrizione)) {
+				PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set quantità = ? where nome = ? and descrizione=?");
 				updateQuery.setInt(1, p.getQuantità()+quantità);
 				updateQuery.setString(2, p.getNome());
+				updateQuery.setString(3, p.getDescrizione());
 				updateQuery.execute();
-			}
-			else {
+				return true;
+			}}
+			
 			PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO prodotti(nome, quantità, descrizione, prezzo) VALUES ( ?, ?, ?, ?);");
 			prepareStatement.setString(1, p.getNome());
 			prepareStatement.setInt(2, p.getQuantità());
 			prepareStatement.setString(3, p.getDescrizione());
 			prepareStatement.setInt(4, p.getPrezzo());
 			prepareStatement.execute();
-			
+			return true;
 			}
-		}
+		
 		public void rimuoviProdotto(Prodotto p) throws SQLException {
 			PreparedStatement prepareStatement = this.connessione.prepareStatement("delete from prodotti where id = ? limit 1");
 			prepareStatement.setInt(1,p.getId());
@@ -103,11 +105,31 @@ Scontrino scontrino =new Scontrino();
 				prodottoDB.setPrezzo(executeQuery.getInt(5));
 			}
              
+			Prodotto prodottoCarrello = new Prodotto();
+			prodottoCarrello.setId(p.getId());
+			prodottoCarrello.setNome(prodottoDB.getNome());
+			prodottoCarrello.setQuantità(p.getQuantità());
+			for(int i=0;i<p.getQuantità();i++) {
+			prodottoCarrello.setPrezzo(prodottoDB.getPrezzo()+prodottoCarrello.getPrezzo());
+			}
 			if (p.getQuantità() > prodottoDB.getQuantità()) {
 				return false;
 			}
+			if (p.getQuantità()==prodottoDB.getQuantità()) {
+				
+				scontrino.getProdottiAquistati().add(prodottoCarrello);
+				PreparedStatement deleteQuery = this.connessione.prepareStatement("Delete prodotti where id = ?");
+				deleteQuery.setInt(1, p.getId());
+				deleteQuery.execute();
+				PreparedStatement prepareStatement3 = this.connessione.prepareStatement("INSERT INTO prodotti_venduti(numero_vendite, id_prodotti_venduti) VALUES ( ?, ?);");
+				prepareStatement3.setInt(1,p.getQuantità());
+				prepareStatement3.setInt(2,p.getId());
+				prepareStatement3.execute();
+				return true;
+
+			}else {
 			
-			scontrino.getProdottiAquistati().add(prodottoDB);
+			scontrino.getProdottiAquistati().add(prodottoCarrello);
 			PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set quantità = ? where id = ?");
 			updateQuery.setInt(1, prodottoDB.getQuantità() - p.getQuantità());
 			updateQuery.setInt(2, prodottoDB.getId());
@@ -116,10 +138,10 @@ Scontrino scontrino =new Scontrino();
 			prepareStatement3.setInt(1,p.getQuantità());
 			prepareStatement3.setInt(2,p.getId());
 			prepareStatement3.execute();
-			
-			
-			
 			return true;
+
+			}
+			
 
 		}
 		public List<Scontrino> scontriniDiUnCliente(int idCliente) throws SQLException {
