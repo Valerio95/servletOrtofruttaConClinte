@@ -97,7 +97,7 @@ Id
 <option value=<%=c.getId()%> > id:<%=c.getId()%>
 <% } %>
 </select></p>
-Quantità: <input type="number"  min = "1"name ="qta" /><br><br>
+Quantità: <input type="number"  min = "1"name ="qta" ><br><br>
 <input type="submit" name ="azione" value="Aggiungi"> <br><br>
 <input type="submit" name ="azione" value="Compra"> <br><br>
 </form>

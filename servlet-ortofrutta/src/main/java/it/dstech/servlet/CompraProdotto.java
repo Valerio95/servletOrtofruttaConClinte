@@ -3,12 +3,10 @@ package it.dstech.servlet;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
-
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
 import it.dstech.servlet.modelli.Prodotto;
 import it.dstech.servlet.repos.DBManagment;
 
@@ -22,13 +20,14 @@ public class CompraProdotto extends HttpServlet{
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
 		String azione = req.getParameter("azione");
-		int idProdotto = Integer.parseInt(req.getParameter("id"));
-		int qta = Integer.parseInt(req.getParameter("qta")); 
-		int idCliente=Integer.parseInt(req.getParameter("idCliente"));
-		Prodotto p = new Prodotto();
-		p.setId(idProdotto);
-		p.setQuantità(qta);
 		if("Aggiungi".equalsIgnoreCase(azione)) {
+			
+			int idProdotto = Integer.parseInt(req.getParameter("id"));
+			int qta = Integer.parseInt(req.getParameter("qta")); 
+			int idCliente=Integer.parseInt(req.getParameter("idCliente"));
+			Prodotto p = new Prodotto();
+			p.setId(idProdotto);
+			p.setQuantità(qta);
 		try {
 			DBManagment db = new DBManagment();
 			boolean vendiProdotto = db.vendiProdotto(idCliente,p);
@@ -49,6 +48,12 @@ public class CompraProdotto extends HttpServlet{
 			e.printStackTrace();
 		}
 	}if("Compra".equalsIgnoreCase(azione)) {
+		int idProdotto = Integer.parseInt(req.getParameter("id"));
+		int qta = Integer.parseInt(req.getParameter("qta")); 
+		int idCliente=Integer.parseInt(req.getParameter("idCliente"));
+		Prodotto p = new Prodotto();
+		p.setId(idProdotto);
+		p.setQuantità(qta);
 		try {
 			DBManagment db = new DBManagment();
 			boolean vendiProdotto = db.vendiProdotto(idCliente, p);

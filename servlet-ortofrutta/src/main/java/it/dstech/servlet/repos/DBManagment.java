@@ -13,7 +13,6 @@ import it.dstech.servlet.modelli.Cliente;
 import it.dstech.servlet.modelli.Scontrino;
 
 public class DBManagment {
-List<Prodotto> carrello=new ArrayList<>();
  static Scontrino scontrino =new Scontrino();
 		private Connection connessione;
 
@@ -30,31 +29,33 @@ List<Prodotto> carrello=new ArrayList<>();
 			prepareStatement.execute();
 		}
 
-		public boolean addProdotto(Prodotto p) throws SQLException {
+		public void addProdotto(Prodotto p) throws SQLException {
 			PreparedStatement controlloProdotti = this.connessione.prepareStatement("select * from prodotti ");
 			ResultSet executeControlloProdotti = controlloProdotti.executeQuery();
 			
 			while (executeControlloProdotti.next()) {
 				String nome=executeControlloProdotti.getString(2);
 				int quantità=executeControlloProdotti.getInt(3);
-				String descrizione=executeControlloProdotti.getString(2);
+				String descrizione=executeControlloProdotti.getString(4);
 				
-			if(p.getNome().equalsIgnoreCase(nome)&p.getDescrizione().equalsIgnoreCase(descrizione)) {
+			if(p.getNome().equalsIgnoreCase(nome)&&p.getDescrizione().equalsIgnoreCase(descrizione)) {
 				PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set quantità = ? where nome = ? and descrizione=?");
 				updateQuery.setInt(1, p.getQuantità()+quantità);
 				updateQuery.setString(2, p.getNome());
 				updateQuery.setString(3, p.getDescrizione());
 				updateQuery.execute();
-				return true;
-			}}
+				
+			}else if(p.getNome().equalsIgnoreCase(nome)&& !p.getDescrizione().equalsIgnoreCase(descrizione)) {
+				PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO prodotti(nome, quantità, descrizione, prezzo) VALUES ( ?, ?, ?, ?);");
+				prepareStatement.setString(1, p.getNome());
+				prepareStatement.setInt(2, p.getQuantità());
+				prepareStatement.setString(3, p.getDescrizione());
+				prepareStatement.setInt(4, p.getPrezzo());
+				prepareStatement.execute();
+			}
+			}
 			
-			PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO prodotti(nome, quantità, descrizione, prezzo) VALUES ( ?, ?, ?, ?);");
-			prepareStatement.setString(1, p.getNome());
-			prepareStatement.setInt(2, p.getQuantità());
-			prepareStatement.setString(3, p.getDescrizione());
-			prepareStatement.setInt(4, p.getPrezzo());
-			prepareStatement.execute();
-			return true;
+			
 			}
 		
 		public void rimuoviProdotto(Prodotto p) throws SQLException {
