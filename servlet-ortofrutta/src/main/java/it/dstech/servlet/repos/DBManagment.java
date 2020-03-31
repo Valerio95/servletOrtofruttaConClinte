@@ -19,9 +19,9 @@ public class DBManagment {
 
 		public DBManagment() throws SQLException, ClassNotFoundException {
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			String password = "95asroma"; 
-			String username = "root"; 
-			String url = "jdbc:mysql://localhost:3306/magazzinoortofrutticolo?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
+			String password = "b0YlBsANSN"; 
+			String username = "yz4fCnpfQB"; 
+			String url = "jdbc:mysql://remotemysql.com:3306/yz4fCnpfQB?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
 			this.connessione = DriverManager.getConnection(url, username, password);
 		}
 		public void aggiungiCliente(Cliente c) throws SQLException {
