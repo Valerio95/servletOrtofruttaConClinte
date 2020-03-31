@@ -27,17 +27,29 @@ table, th, td {
 Nome
 </td>  
 <td>
+ Descrizione
+</td>  
+<td>
  Quantità
+</td>  
+<td>
+ Prezzo
 </td>  
   </tr>	
 <%for(Prodotto p : listaProdotti){%>
 <tr>
     <td>
  <%=p.getNome()%>
-</td>  
+</td> 
+<td>
+ <%=p.getDescrizione()%>
+</td>   
 <td>
  <%=p.getQuantità()%> 
-</td>  
+</td> 
+<td>
+ <%=p.getPrezzo()%> 
+</td>   
   </tr>
 <% } %>
 </table>

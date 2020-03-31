@@ -14,13 +14,14 @@ import it.dstech.servlet.modelli.Scontrino;
 
 public class DBManagment {
  static Scontrino scontrino =new Scontrino();
+ static List<Integer> idProdottiVenduti = new ArrayList<>();
 		private Connection connessione;
 
 		public DBManagment() throws SQLException, ClassNotFoundException {
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			String password = "b0YlBsANSN"; 
-			String username = "yz4fCnpfQB"; 
-			String url = "jdbc:mysql://remotemysql.com:3306/yz4fCnpfQB?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
+			String password = "95asroma"; 
+			String username = "root"; 
+			String url = "jdbc:mysql://localhost:3306/magazzinoortofrutticolo?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
 			this.connessione = DriverManager.getConnection(url, username, password);
 		}
 		public void aggiungiCliente(Cliente c) throws SQLException {
@@ -29,7 +30,7 @@ public class DBManagment {
 			prepareStatement.execute();
 		}
 
-		public void addProdotto(Prodotto p) throws SQLException {
+		public boolean addProdotto(Prodotto p) throws SQLException {
 			PreparedStatement controlloProdotti = this.connessione.prepareStatement("select * from prodotti ");
 			ResultSet executeControlloProdotti = controlloProdotti.executeQuery();
 			
@@ -44,16 +45,17 @@ public class DBManagment {
 				updateQuery.setString(2, p.getNome());
 				updateQuery.setString(3, p.getDescrizione());
 				updateQuery.execute();
-				
-			}else if(p.getNome().equalsIgnoreCase(nome)&& !p.getDescrizione().equalsIgnoreCase(descrizione)) {
+				return true;
+			}
+			} 
 				PreparedStatement prepareStatement = this.connessione.prepareStatement("INSERT INTO prodotti(nome, quantità, descrizione, prezzo) VALUES ( ?, ?, ?, ?);");
 				prepareStatement.setString(1, p.getNome());
 				prepareStatement.setInt(2, p.getQuantità());
 				prepareStatement.setString(3, p.getDescrizione());
 				prepareStatement.setInt(4, p.getPrezzo());
 				prepareStatement.execute();
-			}
-			}
+			
+			return true;
 			
 			
 			}
@@ -64,7 +66,7 @@ public class DBManagment {
 			prepareStatement.execute();
 		}
 		public void rimuoviCliente(int id) throws SQLException {
-			PreparedStatement prepareStatement = this.connessione.prepareStatement("delete from clienti where id = ? limit 1");
+			PreparedStatement prepareStatement = this.connessione.prepareStatement("delete from clienti where id = ? limit 1;");
 			prepareStatement.setInt(1, id);
 			prepareStatement.execute();
 		}
@@ -73,21 +75,27 @@ public class DBManagment {
 			prepareStatement.setInt(1, idCliente);
 			prepareStatement.setInt(2, scontrino.calcolaPrezzoTotale());
 			prepareStatement.execute();
-            PreparedStatement prepareStatement2 = this.connessione.prepareStatement("select Max(id) from scontrino");
+            
+		}
+		public void assegnaIdScontrino(int idCliente) throws SQLException {
+			PreparedStatement prepareStatement2 = this.connessione.prepareStatement("select Max(id) from scontrino where id_clienti=?;");
+			prepareStatement2.setInt(1, idCliente);
             ResultSet executeQuery = prepareStatement2.executeQuery();
            int idScontrino=0;
             while(executeQuery.next()) {
             	idScontrino =executeQuery.getInt(1);
             }
-            for(Prodotto prodotto: scontrino.getProdottiAquistati() ) {
-    			PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti_venduti set id_scontrino = ? where id = ?");
+            
+            
+            for(Integer idProdotto: idProdottiVenduti ) {
+    			PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti_venduti set id_scontrino = ? where id = ?;");
                 updateQuery.setInt(1, idScontrino);
-                updateQuery.setInt(2, prodotto.getId());
+                updateQuery.setInt(2, idProdotto);
                 updateQuery.execute();
-			}
+			
 				
 				
-				
+            }
 		}
 
 		public boolean vendiProdotto(int idCliente,Prodotto p) throws SQLException {
@@ -119,13 +127,22 @@ public class DBManagment {
 			if (p.getQuantità()==prodottoDB.getQuantità()) {
 				
 				scontrino.getProdottiAquistati().add(prodottoCarrello);
-				PreparedStatement deleteQuery = this.connessione.prepareStatement("Delete prodotti where id = ?");
-				deleteQuery.setInt(1, p.getId());
-				deleteQuery.execute();
-				PreparedStatement prepareStatement3 = this.connessione.prepareStatement("INSERT INTO prodotti_venduti(numero_vendite, id_prodotti_venduti) VALUES ( ?, ?);");
+				PreparedStatement prepareStatement3 = this.connessione.prepareStatement("INSERT INTO prodotti_venduti(numero_vendite, id_prodotti_venduti, id_scontrino) VALUES ( ?, ?,?);");
 				prepareStatement3.setInt(1,p.getQuantità());
 				prepareStatement3.setInt(2,p.getId());
+				prepareStatement3.setInt(3,0);
 				prepareStatement3.execute();
+				PreparedStatement deleteQuery = this.connessione.prepareStatement("Delete from prodotti where id = ?");
+				deleteQuery.setInt(1, p.getId());
+				deleteQuery.execute();
+				PreparedStatement prepareStatement2 = this.connessione.prepareStatement("select Max(id) from prodotti_venduti where id_prodotti_venduti=?;");
+				prepareStatement2.setInt(1, p.getId());
+	            ResultSet executeQuery2 = prepareStatement2.executeQuery();
+	           int idScontrino=0;
+	            while(executeQuery2.next()) {
+	            	idScontrino =executeQuery2.getInt(1);
+	            }
+	            idProdottiVenduti.add(idScontrino);
 				return true;
 
 			}else {
@@ -135,17 +152,26 @@ public class DBManagment {
 			updateQuery.setInt(1, prodottoDB.getQuantità() - p.getQuantità());
 			updateQuery.setInt(2, prodottoDB.getId());
 			updateQuery.execute();
-			PreparedStatement prepareStatement3 = this.connessione.prepareStatement("INSERT INTO prodotti_venduti(numero_vendite, id_prodotti_venduti) VALUES ( ?, ?);");
+			PreparedStatement prepareStatement3 = this.connessione.prepareStatement("INSERT INTO prodotti_venduti(numero_vendite, id_prodotti_venduti, id_scontrino) VALUES ( ?, ?, ?);");
 			prepareStatement3.setInt(1,p.getQuantità());
 			prepareStatement3.setInt(2,p.getId());
+			prepareStatement3.setInt(3,0);
 			prepareStatement3.execute();
+			PreparedStatement prepareStatement2 = this.connessione.prepareStatement("select Max(id) from prodotti_venduti where id_prodotti_venduti=?;");
+			prepareStatement2.setInt(1, p.getId());
+            ResultSet executeQuery2 = prepareStatement2.executeQuery();
+			int idScontrino=0;
+            while(executeQuery2.next()) {
+            	idScontrino =executeQuery2.getInt(1);
+            }
+            idProdottiVenduti.add(idScontrino);
 			return true;
 
 			}
 			
 
 		}
-		public List<Scontrino> scontriniDiUnCliente(int idCliente) throws SQLException {
+		public List<Scontrino> scontriniCliente(int idCliente) throws SQLException {
 			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from scontrino where id_clienti=?;");
 			updateQuery.setInt(1, idCliente);
 			ResultSet executeQuery = updateQuery.executeQuery();
@@ -231,6 +257,8 @@ public class DBManagment {
 			updateQuery2.setInt(1, idProdotto);
 			ResultSet executeQuery2 = updateQuery2.executeQuery();
 			while(executeQuery2.next()) {
+				temp.setPrezzo(executeQuery2.getInt(5));
+				temp.setDescrizione(executeQuery2.getString(4));
 				temp.setNome(executeQuery2.getString(2));
 				elenco.add(temp);
 			}

@@ -34,6 +34,9 @@ Quantità
 <td>
 Descrizione 
 </td>  
+<td>
+Prezzo 
+</td>  
   </tr>	
 <%for(Prodotto p : listaProdotti){%>
 <tr>
@@ -47,7 +50,10 @@ Descrizione
 <%=p.getQuantità()%> 
 </td> 
 <td>
-<%=p.getDescrizione()%></td>   
+<%=p.getDescrizione()%></td>
+<td>
+<%=p.getPrezzo()%>
+</td>    
   </tr>
 <% } %>
 </table>

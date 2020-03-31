@@ -15,9 +15,19 @@ table, th, td {
 </style>
 <body>
 
+
+<% String messaggio = (String) request.getAttribute("messaggio"); 
+	if (messaggio != null ){
+		%>
+		<h1>ERRORE</h1>
+		<%=messaggio%>
+					
+	<% }
+	else{
+%>
 <%List<Prodotto> listaProdotti = (List<Prodotto>)request.getAttribute("lista"); %>
 <%List<Prodotto> carrello = (List<Prodotto>)request.getAttribute("carrello"); %>
-
+<%int costoTotale = (Integer)request.getAttribute("costoTotale"); %>
 <table>
 <tr>
   <th>Carrello</th>
@@ -35,6 +45,9 @@ Id
   <td> 
   Prezzo
   </td> 
+   <td> 
+  Costo Totale
+  </td> 
   </tr>	
 <% for(Prodotto p : carrello){%>
 <tr>
@@ -50,8 +63,13 @@ Id
   <td> 
   <%=p.getPrezzo()%>
   </td> 
-  </tr>
+  
 <% } %>
+<td> 
+  <%=costoTotale%>
+  </td> 
+</tr>
+
 <tr>
   <th>Lista Prodotti</th>
 </tr>	
@@ -103,6 +121,7 @@ Quantità: <input type="number"  min = "1"name ="qta" ><br><br>
 </form>
 <form action="intro">
 <input type="submit" value="Torna in home"> </form>
+<% } %>
 </body>
 </body>
 </html>

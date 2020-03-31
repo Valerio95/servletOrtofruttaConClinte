@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
 import it.dstech.servlet.modelli.Prodotto;
+import it.dstech.servlet.modelli.Scontrino;
 import it.dstech.servlet.repos.DBManagment;
 
 public class AzioneCliente extends HttpServlet{
@@ -25,6 +26,8 @@ public class AzioneCliente extends HttpServlet{
 				DBManagment db = new DBManagment();
 				List<Prodotto> lista = db.getAll();
 				req.setAttribute("lista", lista);
+                int costoTotale=0;
+				req.setAttribute("costoTotale",costoTotale );
 				List<Prodotto> carrello = db.stampaCarrello();
 				req.setAttribute("carrello", carrello);
 				req.setAttribute("idCliente", id);
@@ -37,13 +40,13 @@ public class AzioneCliente extends HttpServlet{
 		} else if ("stampa".equalsIgnoreCase(azione)) {
 			try {
 				DBManagment db = new DBManagment();
-				List<Prodotto> lista = db.getAll();
+				List<Scontrino> lista = db.scontriniCliente(id);
 				req.setAttribute("lista", lista);
 			} catch (ClassNotFoundException | SQLException e) {
 				
 				e.printStackTrace();
 			}
-			req.getRequestDispatcher("stampa.jsp").forward(req, resp);
+			req.getRequestDispatcher("stampaScontriniCliente.jsp").forward(req, resp);
 		}	
 
 }}

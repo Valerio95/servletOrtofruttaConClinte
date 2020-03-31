@@ -76,6 +76,16 @@
 	<url-pattern>/nuovoCliente</url-pattern>
 </servlet-mapping>
 	
+	<servlet>
+	<servlet-name>eliminaCliente</servlet-name>
+	<servlet-class>it.dstech.servlet.RimuoviCliente</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>eliminaCliente</servlet-name>
+	<url-pattern>/rimuoviCliente</url-pattern>
+</servlet-mapping>
+
 	<welcome-file-list>
 	<welcome-file>/welcome.jsp</welcome-file>
 	</welcome-file-list>

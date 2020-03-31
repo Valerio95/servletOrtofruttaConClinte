@@ -21,7 +21,7 @@
 %>
 
 
-<h1>Benvenuto cliente</h1>
+<h1>Benvenuto cliente <%=request.getParameter("idCliente")%></h1>
 <h1>Cosa vuoi fare?</h1>
 
 

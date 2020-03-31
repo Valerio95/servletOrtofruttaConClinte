@@ -29,7 +29,10 @@ Id
 </td>  
 <td>
 Nome
-</td>  
+</td> 
+<td>
+Descrizione 
+</td>   
 <td>
 Quantità 
 </td>  
@@ -41,6 +44,9 @@ Quantità
 </td>  
 <td>
  <%=p.getNome()%>
+</td>  
+<td>
+<%=p.getDescrizione()%> 
 </td>  
 <td>
 <%=p.getQuantità()%> 
