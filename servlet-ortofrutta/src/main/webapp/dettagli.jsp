@@ -1,4 +1,4 @@
-<%@page import="it.dstech.servlet.modelli.Scontrino"%>
+<%@page import="it.dstech.servlet.modelli.Prodotto"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
     pageEncoding="ISO-8859-1"%>
@@ -15,45 +15,47 @@ table, th, td {
 </style>
 <body>
 
-<%List<Scontrino> listaScontrini = (List<Scontrino>)request.getAttribute("lista"); %>
+<%List<Prodotto> listaProdotti = (List<Prodotto>)request.getAttribute("lista"); %>
 
 
 <table>
 <tr>
-  <th>Lista Scontrini</th>
+  <th>Lista Prodotti</th>
 </tr>
 <tr>
     <td>
 Id
 </td> 
 <td>
-Prezzo totale
+Nome
 </td> 
 <td>
- Data di emissione
+ Descrizione
 </td>    
+<td>
+ Quantità
+</td> 
+<td>
+ Prezzo
+</td>     
   </tr>	
-<% for(Scontrino p : listaScontrini){%>
-
+<% for(Prodotto p : listaProdotti){%>
 <tr>
-
     <td>
 <%=p.getId()%> 
 </td> 
 <td>
-<%=p.getPrezzoTotale()%>
+<%=p.getNome()%>
 </td>
 <td>
-<%=p.getDataDiEmissione()%>
+<%=p.getDescrizione()%>
+</td>    
+<td>
+ <%=p.getQuantità()%> 
 </td> 
 <td>
-<form action="dettagli">
-<input type="number" hidden="true" name ="idScontrino" value=<%=p.getId()%>><br><br>
-<input type="submit" value="Dettagli">
-</form>
-
-</td> 
-
+<%=p.getPrezzo()%>
+</td>    
   </tr>
 <% } %>
 </table>

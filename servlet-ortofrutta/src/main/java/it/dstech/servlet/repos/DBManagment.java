@@ -171,6 +171,30 @@ public class DBManagment {
 			
 
 		}
+		public List<Prodotto> dettagliScontrino(int idScontrino) throws SQLException{
+			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from prodotti_venduti where id_scontrino=?;");
+			updateQuery.setInt(1, idScontrino);
+			ResultSet executeQuery = updateQuery.executeQuery();
+			
+			List<Prodotto> dettagli= new ArrayList<>();
+			while(executeQuery.next()) {
+			Prodotto prodotto =new Prodotto();
+			int id = executeQuery.getInt(3);
+			PreparedStatement updateQuery2 = this.connessione.prepareStatement("select * from prodotti where id=?;");
+			updateQuery2.setInt(1, id);
+			ResultSet executeQuery2 = updateQuery2.executeQuery();
+			while(executeQuery2.next()) {
+				prodotto.setNome(executeQuery2.getString(2));
+				prodotto.setDescrizione(executeQuery2.getString(4));
+				prodotto.setPrezzo(executeQuery2.getInt(5));
+			}
+			
+			prodotto.setQuantità(executeQuery.getInt(2));
+			dettagli.add(prodotto);
+			}
+			return dettagli;
+		}
+
 		public List<Scontrino> scontriniCliente(int idCliente) throws SQLException {
 			PreparedStatement updateQuery = this.connessione.prepareStatement("select * from scontrino where id_clienti=?;");
 			updateQuery.setInt(1, idCliente);
@@ -179,7 +203,7 @@ public class DBManagment {
 			while(executeQuery.next()) {
 			Scontrino scontrino =new Scontrino();
 			scontrino.setDataDiEmissione(executeQuery.getTimestamp(4));
-			scontrino.setIdCliente(idCliente);
+			scontrino.setId(executeQuery.getInt(1));
 			scontrino.setPrezzoTotale(executeQuery.getInt(3));
 			listaScontrini.add(scontrino);
 			}

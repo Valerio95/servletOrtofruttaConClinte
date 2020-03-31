@@ -37,7 +37,7 @@ public class AzioneCliente extends HttpServlet{
 			}
 			
 			req.getRequestDispatcher("compraProdotto.jsp").forward(req, resp);
-		} else if ("stampa".equalsIgnoreCase(azione)) {
+		} else if ("stampaScontrini".equalsIgnoreCase(azione)) {
 			try {
 				DBManagment db = new DBManagment();
 				List<Scontrino> lista = db.scontriniCliente(id);
