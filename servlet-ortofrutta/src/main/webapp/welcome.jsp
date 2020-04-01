@@ -6,10 +6,24 @@
 <head>
 <meta charset="ISO-8859-1">
 <title>Welcome</title>
+<style>
+
+
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+
+
+</style>
 </head>
 <body>
 
-
+<div class="center">
 
 <% String messaggio = (String) request.getAttribute("messaggio"); 
 	if (messaggio != null ){
@@ -24,17 +38,12 @@
 
 <h1>Benvenuto nel nostro negozio</h1>
 <h1>Cosa vuoi fare?</h1>
+
 <form action="scegliAzione">
-	<input type="submit" class = "button newClass" name ="azione" value="Aggiungi" /> <br><br>
-	<input type="submit" class = "button" name ="azione" value="Stampa" /> <br><br>
-	<input type="submit" class = "button" name ="azione" value="StampaVendite" /> <br><br>
-	<input type="submit" class = "button" name ="azione" value="Rimuovi" /> <br><br>
-	<input type="submit" class = "button" name ="azione" value="aggiungiCliente" /> <br><br>
-	<input type="submit" class = "button" name ="azione" value="rimuoviCliente" /> <br><br>
-	<input type="submit" class = "button" name ="azione" value="accedi" /> 
-
+	<input type="submit" class = "button newClass" name ="azione" value="Azioni Magazzino" /> <br><br>
+    <input type="submit" class = "button" name ="azione" value="Azioni Cliente" /> <br><br>	
 </form>
-
+</div>
 <% } %>
 </body>
 </html>

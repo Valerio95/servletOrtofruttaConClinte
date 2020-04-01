@@ -7,7 +7,7 @@
 <link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
-<title>Rimuovi Prodotto</title>
+<title>Modifica Prodotto</title>
 </head>
 <style>
 table {
@@ -59,7 +59,10 @@ Descrizione
 </td>   
 <td>
 Quantità 
-</td>  
+</td>
+<td>
+Prezzo 
+</td>    
   </tr>	
 <%for(Prodotto p : listaProdotti){%>
 <tr>
@@ -75,18 +78,25 @@ Quantità
 <td>
 <%=p.getQuantità()%> 
 </td>  
+<td>
+<%=p.getPrezzo()%> 
+</td>  
   </tr>
 <% } %>
 </table>
-
 <div class="center">
-<form action="rimuovi" method="post">
-<p>IdProdotto: <select  name="prodottoScelto" >
+
+<form action="modificaProdotto" method="post">
+<p>IdProdotto: <select  name="idProdotto" >
 <%for(Prodotto p : listaProdotti){%>
 <option  value=<%=p.getId()%> > id:<%=p.getId()%> 
 <% } %>
 </select></p>
-	<input type="submit" class = "button newClass" value="RIMUOVI"> <br><br>
+    Nome:<input type="text" name="nome" /><br><br>
+	Quantità:<input type="number"min = "1" name="qta" /><br><br>
+	Descrizione:<input type="text" name="descrizione" /><br><br>
+	Prezzo:<input type="number" min = "1" name="prezzo" /><br><br>
+	<input type="submit" class = "button newClass" value="Modifica"> <br><br>
 </form>
 </div>
 
@@ -94,6 +104,7 @@ Quantità
 <form action="azioniMagazzino.jsp">
 <input type="submit" class = "button newClass" value="Torna indietro"> </form>
 </div>
+
 </body>
 </body>
 </html>

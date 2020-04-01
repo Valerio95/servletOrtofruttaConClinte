@@ -19,9 +19,9 @@ public class DBManagment {
 
 		public DBManagment() throws SQLException, ClassNotFoundException {
 			Class.forName("com.mysql.cj.jdbc.Driver"); 
-			String password = "b0YlBsANSN"; 
-			String username = "yz4fCnpfQB"; 
-			String url = "jdbc:mysql://remotemysql.com:3306/yz4fCnpfQB?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
+			String password = "95asroma"; 
+			String username = "root"; 
+			String url = "jdbc:mysql://localhost:3306/magazzinoortofrutticolo?useUnicode=true&useLegacyDatetimeCode=false&serverTimezone=UTC&createDatabaseIfNotExist=true&allowPublicKeyRetrieval=true&useSSL=false";
 			this.connessione = DriverManager.getConnection(url, username, password);
 		}
 		public void aggiungiCliente(Cliente c) throws SQLException {
@@ -59,6 +59,17 @@ public class DBManagment {
 			
 			
 			}
+		public void modificaProdotto(int idProdotto,Prodotto p) throws SQLException {
+			PreparedStatement updateQuery = this.connessione.prepareStatement("Update prodotti set nome= ?, quantità= ?, descrizione= ?, prezzo = ? where id = ?;");
+            updateQuery.setString(1, p.getNome());
+            updateQuery.setInt(2, p.getQuantità());
+            updateQuery.setString(3, p.getDescrizione());
+            updateQuery.setInt(4, p.getPrezzo());
+            updateQuery.setInt(5, idProdotto);
+
+            updateQuery.execute();
+			
+		}
 		
 		public void rimuoviProdotto(Prodotto p) throws SQLException {
 			PreparedStatement prepareStatement = this.connessione.prepareStatement("delete from prodotti where id = ? limit 1");

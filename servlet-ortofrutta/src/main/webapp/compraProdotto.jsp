@@ -22,6 +22,20 @@ table {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+.bottomleft {
+  position: static;
+  bottom: 8px;
+  left: 16px;
+  font-size: 18px;
+}
 </style>
 <body>
 
@@ -123,6 +137,7 @@ Id
   </tr>
 <% } %>
 </table>
+<div class="center">
 
 <form  action="compra" method="post">
 <input type="number" hidden="true" name ="idCliente" value=<%=request.getAttribute("idCliente")%>><br><br>
@@ -135,8 +150,12 @@ Quantità: <input type="number"  min = "1"name ="qta" ><br><br>
 <input type="submit" class = "button newClass" name ="azione" value="Aggiungi"> <br><br>
 <input type="submit" class = "button newClass" name ="azione" value="Compra"> <br><br>
 </form>
-<form action="intro">
-<input type="submit" class = "button newClass" value="Torna in home"> </form>
+</div>
+<div class="bottomleft">
+
+<form action="welcomeCliente.jsp">
+<input type="submit" class = "button newClass" value="Torna indietro"> </form>
+</div>
 <% } %>
 </body>
 </body>

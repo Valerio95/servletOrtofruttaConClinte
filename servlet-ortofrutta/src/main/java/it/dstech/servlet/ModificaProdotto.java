@@ -9,32 +9,40 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-import it.dstech.servlet.modelli.Cliente;
+import it.dstech.servlet.modelli.Prodotto;
 import it.dstech.servlet.repos.DBManagment;
 
-public class AggiungiCliente extends HttpServlet{
+public class ModificaProdotto extends HttpServlet{
+	
 	@Override
 	protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-		req.setAttribute("messaggio", "hai provato a fare l'accesso all'aggiunta di un prodotto dalla get");
+		req.setAttribute("messaggio", "hai provato a fare l'accesso alla modifica di un prodotto dalla get");
 		req.getRequestDispatcher("welcome.jsp").forward(req, resp);
 
 	}
 
 	@Override
 	protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+		int id = Integer.parseInt(req.getParameter("idProdotto"));
 		String nome = req.getParameter("nome");
-		Cliente c = new Cliente();
-		c.setNome(nome);
-		
+		int qta = Integer.parseInt(req.getParameter("qta"));
+		String descrizione =req.getParameter("descrizione");
+		int prezzo = Integer.parseInt(req.getParameter("prezzo"));
+		Prodotto p = new Prodotto();
+		p.setNome(nome);
+		p.setQuantità(qta);
+		p.setDescrizione(descrizione);
+		p.setPrezzo(prezzo);
 		try {
 			DBManagment dbManagment = new DBManagment();
-			List<Cliente> lista =  dbManagment.listaClienti();
+			dbManagment.modificaProdotto(id, p);
+			List<Prodotto> lista = dbManagment.getAll();
 			req.setAttribute("lista", lista);
-			dbManagment.aggiungiCliente(c);
 		} catch (SQLException | ClassNotFoundException e) {
 			e.printStackTrace();
 		}
-		req.getRequestDispatcher("aggiungiCliente.jsp").forward(req, resp);
+		req.getRequestDispatcher("modificaProdotto.jsp").forward(req, resp);
 
 	}
+
 }

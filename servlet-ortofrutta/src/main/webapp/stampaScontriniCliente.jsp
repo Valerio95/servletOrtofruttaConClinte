@@ -22,6 +22,14 @@ table {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
 </style>
 <body>
 
@@ -57,17 +65,21 @@ Prezzo totale
 <%=p.getDataDiEmissione()%>
 </td> 
 <td>
+<div class="center">
+
 <form action="dettagli">
 <input type="number" hidden="true" name ="idScontrino" value=<%=p.getId()%>><br><br>
 <input type="submit" class = "button newClass" value="Dettagli">
 </form>
-
+</div>
 </td> 
 
   </tr>
 <% } %>
 </table>
-<form action="intro">
-<input type="submit" class = "button newClass" value="Torna in home"> </form>
+<div class="center">
+<form action="welcomeClienti.jsp">
+<input type="submit" class = "button newClass" value="Torna indietro"> </form>
+</div>
 </body>
 </html>

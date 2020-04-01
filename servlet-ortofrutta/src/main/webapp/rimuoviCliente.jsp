@@ -22,6 +22,20 @@ table {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+.bottomleft {
+  position: static;
+  bottom: 8px;
+  left: 16px;
+  font-size: 18px;
+}
 </style>
 <body>
 
@@ -48,8 +62,8 @@ tr:nth-child(even) {
   </tr>
 <% } %>
 </table>
-
-<form action="rimuoviCliente" >
+<div class="center">
+<form action="rimuoviCliente" method="post" >
 <p>Clienti : <select name="idCliente">
 <%for(Cliente c : listaClienti){%>
 <option value=<%=c.getId()%> > <%=c.getId()%>
@@ -57,10 +71,12 @@ tr:nth-child(even) {
 </select></p>
 	<input type="submit" class = "button newClass" value="Elimina"> <br><br>
 </form>
+</div>
 
-<br><br>
-<form action="intro">
-<input type="submit" value="Torna in home"> </form>
+<div class="bottomleft">
+<form action="azioniCliente.jsp">
+<input type="submit" class = "button newClass" value="Torna indietro"> </form>
+</div>
 </body>
 </body>
 </html>

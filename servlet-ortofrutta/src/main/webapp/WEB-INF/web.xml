@@ -96,6 +96,26 @@
 	<url-pattern>/dettagli</url-pattern>
 </servlet-mapping>
 
+<servlet>
+	<servlet-name>magazzino</servlet-name>
+	<servlet-class>it.dstech.servlet.AzioniMagazzino</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>magazzino</servlet-name>
+	<url-pattern>/azioniMagazzino</url-pattern>
+</servlet-mapping>
+
+<servlet>
+	<servlet-name>azioniCliente</servlet-name>
+	<servlet-class>it.dstech.servlet.SceltaAzioniCliente</servlet-class>
+</servlet>
+
+<servlet-mapping>
+	<servlet-name>azioniCliente</servlet-name>
+	<url-pattern>/sceltaAzioniCliente</url-pattern>
+</servlet-mapping>
+
 
 	<welcome-file-list>
 	<welcome-file>/welcome.jsp</welcome-file>

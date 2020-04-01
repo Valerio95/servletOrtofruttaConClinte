@@ -22,6 +22,20 @@ table {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+.bottomleft {
+  position: static;
+  bottom: 8px;
+  left: 16px;
+  font-size: 18px;
+}
 </style>
 <body>
 <%List<Prodotto> listaProdotti = (List<Prodotto>)request.getAttribute("lista"); %>
@@ -67,6 +81,7 @@ Prezzo
   </tr>
 <% } %>
 </table>
+<div class="center">
 <h1>Inserisci i parametri del nuovo prodotto</h1>
 
 <form action="negozio" method="post">
@@ -76,7 +91,10 @@ Prezzo
 	Prezzo:<input type="number" min = "1" name="prezzo" /><br><br>
 	<input type="submit" class = "button newClass" name ="azione" value="Aggiungi" /> <br>
 </form>
-<form action="intro">
-<input type="submit" class = "button newClass" value="Torna in home"> </form>
+</div>
+<div class="bottomleft">
+<form action="azioniMagazzino.jsp">
+<input type="submit" class = "button newClass" value="Torna indietro"> </form>
+</div>
 </body>
 </html>

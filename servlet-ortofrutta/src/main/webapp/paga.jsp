@@ -23,6 +23,15 @@ table {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
+
 </style>
 <body>
 
@@ -76,7 +85,10 @@ Costo Totale <%=scontrino.getPrezzoTotale()%>
 </td>   
   </tr>
 </table>
-<form action="intro">
-<input type="submit" class = "button newClass" value="Paga"> </form>
+<div class="center">
+
+<form action="welcomeCliente.jsp">
+<input type="submit" class = "button newClass" value="Torna indietro"> </form>
+</div>
 </body>
 </html>

@@ -22,6 +22,14 @@ table {
 tr:nth-child(even) {
 	background-color: #dddddd;
 }
+.center {
+  position: static;
+  left: 0;
+  top: 10%;
+  width: 100%;
+  text-align: center;
+  font-size: 18px;
+}
 </style>
 <body>
 
@@ -63,7 +71,10 @@ Nome
   </tr>
 <% } %>
 </table>
-<form action="intro">
-<input type="submit" class = "button newClass" value="Torna in home"> </form>
+
+<div class="center">
+<form action="azioniMagazzino.jsp">
+<input type="submit" class = "button newClass" value="Torna indietro"> </form>
+</div>
 </body>
 </html>
