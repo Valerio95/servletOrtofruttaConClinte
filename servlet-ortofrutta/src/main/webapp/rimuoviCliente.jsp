@@ -4,6 +4,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -46,7 +47,7 @@ table, th, td {
 <option value=<%=c.getId()%> > <%=c.getId()%>
 <% } %>
 </select></p>
-	<input type="submit" value="Elimina"> <br><br>
+	<input type="submit" class = "button newClass" value="Elimina"> <br><br>
 </form>
 
 <br><br>

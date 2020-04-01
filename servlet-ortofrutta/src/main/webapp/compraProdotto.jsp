@@ -4,6 +4,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -122,11 +123,11 @@ Id
 <% } %>
 </select></p>
 Quantità: <input type="number"  min = "1"name ="qta" ><br><br>
-<input type="submit" name ="azione" value="Aggiungi"> <br><br>
-<input type="submit" name ="azione" value="Compra"> <br><br>
+<input type="submit" class = "button newClass" name ="azione" value="Aggiungi"> <br><br>
+<input type="submit" class = "button newClass" name ="azione" value="Compra"> <br><br>
 </form>
 <form action="intro">
-<input type="submit" value="Torna in home"> </form>
+<input type="submit" class = "button newClass" value="Torna in home"> </form>
 <% } %>
 </body>
 </body>

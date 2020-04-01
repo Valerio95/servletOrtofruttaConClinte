@@ -4,6 +4,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -61,12 +62,12 @@ Quantità
 <option  value=<%=p.getId()%> > id:<%=p.getId()%> 
 <% } %>
 </select></p>
-	<input type="submit" value="RIMUOVI"> <br><br>
+	<input type="submit" class = "button newClass" value="RIMUOVI"> <br><br>
 </form>
 
 <br><br>
 <form action="intro">
-<input type="submit" value="Torna in home"> </form>
+<input type="submit" class = "button newClass" value="Torna in home"> </form>
 </body>
 </body>
 </html>

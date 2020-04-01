@@ -5,6 +5,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -67,6 +68,6 @@ Costo Totale <%=scontrino.getPrezzoTotale()%>
   </tr>
 </table>
 <form action="intro">
-<input type="submit" value="Paga"> </form>
+<input type="submit" class = "button newClass" value="Paga"> </form>
 </body>
 </html>

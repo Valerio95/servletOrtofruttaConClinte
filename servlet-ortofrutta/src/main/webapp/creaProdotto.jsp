@@ -4,6 +4,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -64,9 +65,9 @@ Prezzo
 	Quantità:<input type="number"min = "1" name="qta" /><br><br>
 	Descrizione:<input type="text" name="descrizione" /><br><br>
 	Prezzo:<input type="number" min = "1" name="prezzo" /><br><br>
-	<input type="submit" name ="azione" value="Aggiungi" /> <br>
+	<input type="submit" class = "button newClass" name ="azione" value="Aggiungi" /> <br>
 </form>
 <form action="intro">
-<input type="submit" value="Torna in home"> </form>
+<input type="submit" class = "button newClass" value="Torna in home"> </form>
 </body>
 </html>

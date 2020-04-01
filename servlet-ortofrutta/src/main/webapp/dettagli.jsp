@@ -4,6 +4,7 @@
     pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html>
 <html>
+<link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
 <title>Insert title here</title>
@@ -60,6 +61,6 @@ Nome
 <% } %>
 </table>
 <form action="intro">
-<input type="submit" value="Torna in home"> </form>
+<input type="submit" class = "button newClass" value="Torna in home"> </form>
 </body>
 </html>
