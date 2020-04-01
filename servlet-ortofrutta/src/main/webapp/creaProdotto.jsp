@@ -7,11 +7,20 @@
 <link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Aggiungi Prodotto</title>
 </head>
 <style>
-table, th, td {
+table {
+	font-family: arial, sans-serif;
+	border-collapse: collapse;
+	width: 100%;
+} th, td {
   border: 1px solid black;
+  text-align: left;
+	padding: 8px;
+}
+tr:nth-child(even) {
+	background-color: #dddddd;
 }
 </style>
 <body>

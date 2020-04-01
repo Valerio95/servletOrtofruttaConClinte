@@ -5,7 +5,7 @@
 <link href="css/style.css" rel="stylesheet" type="text/css">
 <head>
 <meta charset="ISO-8859-1">
-<title>Insert title here</title>
+<title>Welcome Cliente</title>
 </head>
 <body>
 
